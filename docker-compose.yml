@@ -1,0 +1,7 @@
+version: '3'
+services:
+  web:
+    image: joshikunal/starbucks:latest
+    ports:
+      - "80:80"
+    restart: always
