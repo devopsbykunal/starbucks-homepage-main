@@ -1,5 +1,6 @@
-FROM ubuntu
-RUN apt-get update -y
-RUN apt-get install apache2 -y
-COPY index.html /var/www/html/
-CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+FROM ubuntu:latest
+RUN apt-get update && \
+    apt-get install -y apache2 && \
+    apt-get clean
+COPY . /var/www/html/
+CMD ["apachectl", "-D", "FOREGROUND"]
