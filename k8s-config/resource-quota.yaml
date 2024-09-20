@@ -9,20 +9,3 @@ spec:
     requests.memory: "2Gi"
     limits.cpu: "3"
     limits.memory: "3Gi"
----
-apiVersion: flowcontrol.apiserver.k8s.io/v1beta2
-kind: FlowSchema
-metadata:
-  name: starbucks-flow-schema
-spec:
-  priorityLevelConfiguration:
-    name: starbucks-priority
-  matchingPrecedence: 1000
-  rules:
-    - resourceRules:
-        - verbs: ["create", "update", "patch"]
-          apiGroups: ["apps", "batch"]
-          resources: ["deployments", "jobs"]
-      subjects:
-        - kind: User
-          name: "*"
