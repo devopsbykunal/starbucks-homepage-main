@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: starbucks-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: starbucks
+  template:
+    metadata:
+      labels:
+        app: starbucks
+    spec:
+      containers:
+        - name: starbucks
+          image: joshikunal/starbucks:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          volumeMounts:
+            - mountPath: "/app/data"
+              name: starbucks-storage
+      volumes:
+        - name: starbucks-storage
+          persistentVolumeClaim:
+            claimName: pvc-starbucks
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: starbucks-service
+spec:
+  selector:
+    app: starbucks
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
