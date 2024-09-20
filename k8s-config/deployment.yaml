@@ -17,30 +17,16 @@ spec:
           image: joshikunal/starbucks:latest
           ports:
             - containerPort: 8080
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "500m"
-            limits:
-              memory: "1Gi"
-              cpu: "1"
           volumeMounts:
+            - name: apache-config
+              mountPath: /etc/apache2/apache2.conf
+              subPath: apache2.conf
             - mountPath: "/app/data"
               name: starbucks-storage
       volumes:
+        - name: apache-config
+          configMap:
+            name: apache-config
         - name: starbucks-storage
           persistentVolumeClaim:
             claimName: pvc-starbucks
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: starbucks-service
-spec:
-  selector:
-    app: starbucks
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
-  type: LoadBalancer
